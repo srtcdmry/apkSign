@@ -49,15 +49,16 @@ public class Main {
 
         return certificate;
     }
+
     public static void main(String[] args) throws GeneralSecurityException, IOException {
         try (
-                FileOutputStream fos = new FileOutputStream("C:\\Users\\sertac.demiray\\ks");
+                FileOutputStream fos = new FileOutputStream("C:\\Users\\sertac.demiray\\ks"); // CREATE FILE
         ) {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);
             //KeyPair keyPair = keyPairGenerator.generateKeyPair();
-           // PrivateKey privateKey = keyPair.getPrivate();
-           //System.out.println(privateKey);
+            // PrivateKey privateKey = keyPair.getPrivate();
+            //System.out.println(privateKey);
 
             X509Certificate[] chain = {generateCertificate("cn=Unknown", 365, "SHA256withRSA")};
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -74,7 +75,7 @@ public class Main {
 
     public static RSAPrivateKey loadPrivateKey() throws GeneralSecurityException, IOException {
         String PRIVATE_KEY = "-----BEGIN RSA PRIVATE KEY-----" +
-                "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCEvRs3kBNplnOtdB3oh+CoYNPjC4ww3bNK+3WSeKuyf7qtrDlVaxPWEIjdrsZlCdgcIA6gTOh7znl7iJ"+
+                "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCEvRs3kBNplnOtdB3oh+CoYNPjC4ww3bNK+3WSeKuyf7qtrDlVaxPWEIjdrsZlCdgcIA6gTOh7znl7iJ" +
                 "mXpDfoWiMnkOAg6HmctmNGPdOE2bS8AbzO5KR9FE6as/dJY7ASEjUOhz0eo2TiRzNSFttun0IAWs75cpegNYtchM+iIYR0N2I0ec0L8LP72vuKYP5spJFe2G59glskWS8T6R" +
                 "AwSQ/UFE4ayhnsxAIB3yZLRB4Wj3UIh8EJRXqjFfeKthE16j3x2f7Se+4pIswJjaF0xoBmNPXQDKRjEhnpfXvheqiw4kRGPzmfhEPZMAAYY/Xb7NeLE8+pGvCK77IxEk9HAgMBA" +
                 "AECggEAGBWDwbIXg5nzxS4DWzSEM6jV6SUoO5mONXWooHnalVmNkoNkJ7Z08+suGiLjBmQh3QCIBtfNeuE8s4hWbegy6KqqJDyqHe5wWlnRa2Y+YaVqoI4kJtnfan5rwLAUlzFKOg0p" +
@@ -97,7 +98,7 @@ public class Main {
         // Remove the "BEGIN" and "END" lines, as well as any whitespace
 
         String pkcs8Pem = pkcs8Lines.toString();
-        pkcs8Pem = pkcs8Pem.replaceAll("\\n+","").replace("-----BEGIN RSA PRIVATE KEY-----", "").replace("-----END RSA PRIVATE KEY-----", "");
+        pkcs8Pem = pkcs8Pem.replaceAll("\\n+", "").replace("-----BEGIN RSA PRIVATE KEY-----", "").replace("-----END RSA PRIVATE KEY-----", "");
 
         byte[] encoded = org.apache.commons.codec.binary.Base64.decodeBase64(pkcs8Pem);
 
@@ -106,14 +107,13 @@ public class Main {
         return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
     }
 
-    public static RSAPublicKey loadPublicKey() throws GeneralSecurityException, IOException
-    {
+    public static RSAPublicKey loadPublicKey() throws GeneralSecurityException, IOException {
 
         String PUBLIC_KEY = "-----BEGIN RSA PUBLIC KEY-----\n" +
-                "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhL0bN5ATaZZzrXQd6IfgqGDT4wuMMN2zSvt1knirsn+6ra\n"+
-                "w5VWsT1hCI3a7GZQnYHCAOoEzoe855e4iZl6Q36FojJ5DgIOh5nLZjRj3ThNm0vAG8zuSkfRROmrP3SWOwEhI1Doc9HqNk4kczUhbbbp\n"+
+                "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhL0bN5ATaZZzrXQd6IfgqGDT4wuMMN2zSvt1knirsn+6ra\n" +
+                "w5VWsT1hCI3a7GZQnYHCAOoEzoe855e4iZl6Q36FojJ5DgIOh5nLZjRj3ThNm0vAG8zuSkfRROmrP3SWOwEhI1Doc9HqNk4kczUhbbbp\n" +
                 "9CAFrO+XKXoDWLXITPoiGEdDdiNHnNC/Cz+9r7imD+bKSRXthufYJbJFkvE+kQMEkP1BROGsoZ7MQCAd8mS0QeFo91CIfBCUV6oxX\n" +
-                "3irYRNeo98dn+0nvuKSLMCY2hdMaAZjT10AykYxIZ6X174XqosOJERj85n4RD2TAAGGP12+zXixPPqRrwiu+yMRJPRwIDAQAB"+
+                "3irYRNeo98dn+0nvuKSLMCY2hdMaAZjT10AykYxIZ6X174XqosOJERj85n4RD2TAAGGP12+zXixPPqRrwiu+yMRJPRwIDAQAB" +
                 "-----END RSA PUBLIC KEY-----";
         StringBuilder pkcs8Lines = new StringBuilder();
         BufferedReader rdr = new BufferedReader(new StringReader(PUBLIC_KEY));
