@@ -1,9 +1,6 @@
 import sun.security.x509.*;
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.X509Certificate;
@@ -17,6 +14,38 @@ import java.util.Base64;
 import java.util.Date;
 
 public class Main {
+    public static void apkSign() {
+        File file = new File("signconfig/sign.conf");
+
+        if (file.exists()) {
+            try {
+                FileInputStream fileInputStream = new FileInputStream(file);
+                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String config = bufferedReader.readLine();
+
+                if (config != null) {
+                    if (config.contains("signapk.jar")) {
+                        //使用signapk.jar,如:java -jar signapk.jar platform.x509.pem platform.pk8 MyDemo.apk MyDemo_signed.apk
+                    } else {
+                        //使用jarsigner,如:jarsigner -verbose -keystore abc.keystore [-storepass feelyou.info] -signedjar 123x.apk 123.apk hi
+                        config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\keystore1.keystore", "123456", "123456", "C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk", "main");
+
+
+                        String result = CommandUtil.exec(config);
+                        System.out.print(result);
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     private static X509Certificate generateCertificate(String dn, int validity, String sigAlgName) throws GeneralSecurityException, IOException {
         PrivateKey privateKey = loadPrivateKey();
@@ -50,28 +79,6 @@ public class Main {
         return certificate;
     }
 
-    public static void main(String[] args) throws GeneralSecurityException, IOException {
-        try (
-                FileOutputStream fos = new FileOutputStream("C:\\Users\\sertac.demiray\\ks"); // CREATE FILE
-        ) {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048);
-            //KeyPair keyPair = keyPairGenerator.generateKeyPair();
-            // PrivateKey privateKey = keyPair.getPrivate();
-            //System.out.println(privateKey);
-
-            X509Certificate[] chain = {generateCertificate("cn=Unknown", 365, "SHA256withRSA")};
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(null, null);
-            keyStore.setKeyEntry("main", loadPrivateKey(), "654321".toCharArray(), chain);
-            keyStore.store(fos, "123456".toCharArray());
-        } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-        System.out.println(generateCertificate("cn=Unknown", 365, "SHA256withRSA"));
-        System.out.println("Worked");
-        System.out.println(loadPrivateKey());
-    }
 
     public static RSAPrivateKey loadPrivateKey() throws GeneralSecurityException, IOException {
         String PRIVATE_KEY = "-----BEGIN RSA PRIVATE KEY-----" +
@@ -134,6 +141,31 @@ public class Main {
         KeyFactory fact = KeyFactory.getInstance("RSA");
         return (RSAPublicKey) fact.generatePublic(spec);
 
+    }
+
+
+    public static void main(String[] args) throws GeneralSecurityException, IOException {
+        try (
+                FileOutputStream fos = new FileOutputStream("C:\\Users\\sertac.demiray\\Desktop\\keystore1.keystore"); // CREATE FILE
+        ) {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            //KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            // PrivateKey privateKey = keyPair.getPrivate();
+            //System.out.println(privateKey);
+
+            X509Certificate[] chain = {generateCertificate("cn=TEST", 365, "SHA256withRSA")};
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null, null);
+            keyStore.setKeyEntry("main", loadPrivateKey(), "123456".toCharArray(), chain);
+            keyStore.store(fos, "123456".toCharArray());
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Worked");
+        System.out.println(loadPrivateKey());
+
+        apkSign();
     }
 
 }
