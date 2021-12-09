@@ -20,7 +20,6 @@ public class CommandUtil {
             if (p.exitValue() == 1) {
 
             }
-
         }
         inBr.close();
         in.close();

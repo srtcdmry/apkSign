@@ -6,10 +6,8 @@ import java.security.*;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.sql.SQLOutput;
 import java.util.Base64;
 import java.util.Date;
 
@@ -26,10 +24,8 @@ public class Main {
 
                 if (config != null) {
                     if (config.contains("app-debug.apk")) {
-                        //使用signapk.jar,如:java -jar signapk.jar platform.x509.pem platform.pk8 MyDemo.apk MyDemo_signed.apk
                     } else {
-                        //使用jarsigner,如:jarsigner -verbose -keystore abc.keystore [-storepass feelyou.info] -signedjar 123x.apk 123.apk hi
-                        config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\keystore1.keystore", "main", "123456", "123456","C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
+                        config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\keystore1.keystore", "main", "123456", "123456", "C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
 
 
                         String result = CommandUtil.exec(config);
@@ -67,10 +63,8 @@ public class Main {
         info.set(X509CertInfo.VERSION, new CertificateVersion(CertificateVersion.V3));
         info.set(X509CertInfo.ALGORITHM_ID, new CertificateAlgorithmId(sigAlgId));
 
-        // Sign the cert to identify the algorithm that's used.
         X509CertImpl certificate = new X509CertImpl(info);
         certificate.sign(privateKey, sigAlgName);
-        // Update the algorith, and resign.
         sigAlgId = (AlgorithmId) certificate.get(X509CertImpl.SIG_ALG);
         info.set(CertificateAlgorithmId.NAME + "." + CertificateAlgorithmId.ALGORITHM, sigAlgId);
         certificate = new X509CertImpl(info);
@@ -102,7 +96,6 @@ public class Main {
             pkcs8Lines.append(line);
         }
 
-        // Remove the "BEGIN" and "END" lines, as well as any whitespace
 
         String pkcs8Pem = pkcs8Lines.toString();
         pkcs8Pem = pkcs8Pem.replaceAll("\\n+", "").replace("-----BEGIN RSA PRIVATE KEY-----", "").replace("-----END RSA PRIVATE KEY-----", "");
@@ -129,7 +122,6 @@ public class Main {
             pkcs8Lines.append(line);
         }
 
-        // Remove the "BEGIN" and "END" lines, as well as any whitespace
 
         String pkcs8Pem = pkcs8Lines.toString();
         pkcs8Pem = pkcs8Pem.replaceAll("\\n+", "")
