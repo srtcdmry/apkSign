@@ -42,6 +42,38 @@ public class Main {
         }
     }
 
+    public static  void verifyApk(){
+        File file = new File("signconfig/verify.conf");
+
+        if (file.exists()) {
+            try {
+                FileInputStream fileInputStream = new FileInputStream(file);
+                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String config = bufferedReader.readLine();
+
+                if (config != null) {
+                    if (config.contains("app-debug.apk")) {
+                    } else {
+                        config = String.format(config,"C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
+
+
+                        String result = CommandUtil.exec(config);
+                        System.out.print(result);
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
 
     private static X509Certificate generateCertificate(String dn, int validity, String sigAlgName) throws GeneralSecurityException, IOException {
         PrivateKey privateKey = loadPrivateKey();
@@ -158,6 +190,7 @@ public class Main {
         System.out.println(loadPrivateKey());
 
         apkSign();
+        verifyApk();
     }
 
 }
