@@ -25,7 +25,7 @@ public class Main {
                 if (config != null) {
                     if (config.contains("app-debug.apk")) {
                     } else {
-                        config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\keystore1.keystore", "main", "123456", "123456", "C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
+                        config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\keystore1.jks", "main", "123456", "123456", "C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
 
 
                         String result = CommandUtil.exec(config);
@@ -53,7 +53,7 @@ public class Main {
         CertificateValidity interval = new CertificateValidity(from, to);
         BigInteger serialNumber = new BigInteger(64, new SecureRandom());
         X500Name owner = new X500Name(dn);
-        AlgorithmId sigAlgId = new AlgorithmId(AlgorithmId.sha1WithRSAEncryption_oid);
+        AlgorithmId sigAlgId = new AlgorithmId(AlgorithmId.sha256WithRSAEncryption_oid);
 
         info.set(X509CertInfo.VALIDITY, interval);
         info.set(X509CertInfo.SERIAL_NUMBER, new CertificateSerialNumber(serialNumber));
