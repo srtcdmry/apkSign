@@ -25,11 +25,11 @@ public class Main {
                 String config = bufferedReader.readLine();
 
                 if (config != null) {
-                    if (config.contains("signapk.jar")) {
+                    if (config.contains("app-debug.apk")) {
                         //使用signapk.jar,如:java -jar signapk.jar platform.x509.pem platform.pk8 MyDemo.apk MyDemo_signed.apk
                     } else {
                         //使用jarsigner,如:jarsigner -verbose -keystore abc.keystore [-storepass feelyou.info] -signedjar 123x.apk 123.apk hi
-                        config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\keystore1.keystore", "123456", "123456", "C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk", "main");
+                        config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\keystore1.keystore", "main", "123456", "123456","C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
 
 
                         String result = CommandUtil.exec(config);
@@ -146,7 +146,7 @@ public class Main {
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {
         try (
-                FileOutputStream fos = new FileOutputStream("C:\\Users\\sertac.demiray\\Desktop\\keystore1.keystore"); // CREATE FILE
+                FileOutputStream fos = new FileOutputStream("C:\\Users\\sertac.demiray\\Desktop\\keystore1.jks"); // CREATE FILE
         ) {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);
