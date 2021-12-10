@@ -12,68 +12,45 @@ import java.util.Base64;
 import java.util.Date;
 
 public class Main {
-    public static void apkSign() {
+    public static void apkSign() throws InterruptedException, IOException {
         File file = new File("signconfig/sign.conf");
 
         if (file.exists()) {
-            try {
-                FileInputStream fileInputStream = new FileInputStream(file);
-                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String config = bufferedReader.readLine();
+            FileInputStream fileInputStream = new FileInputStream(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String config = bufferedReader.readLine();
 
-                if (config != null) {
-                    if (config.contains("app-debug.apk")) {
-                    } else {
-                        config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\keystore1.jks", "main", "123456", "123456", "C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
-
-
-                        String result = CommandUtil.exec(config);
-                        System.out.print(result);
-                    }
+            if (config != null) {
+                if (config.contains("app-debug.apk")) {
+                } else {
+                    config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\keystore1.jks", "main", "123456", "123456", "C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
+                    String result = CommandUtil.exec(config);
+                    System.out.print(result);
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }
 
-    public static  void verifyApk(){
+    public static void verifyApk() throws InterruptedException, IOException {
         File file = new File("signconfig/verify.conf");
 
         if (file.exists()) {
-            try {
-                FileInputStream fileInputStream = new FileInputStream(file);
-                InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String config = bufferedReader.readLine();
+            FileInputStream fileInputStream = new FileInputStream(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String config = bufferedReader.readLine();
 
-                if (config != null) {
-                    if (config.contains("app-debug.apk")) {
-                    } else {
-                        config = String.format(config,"C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
-
-
-                        String result = CommandUtil.exec(config);
-                        System.out.print(result);
-                    }
+            if (config != null) {
+                if (config.contains("app-debug.apk")) {
+                } else {
+                    config = String.format(config, "C:\\Users\\sertac.demiray\\Desktop\\app-debug.apk");
+                    String result = CommandUtil.exec(config);
+                    System.out.print(result);
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
-
-
     }
-
 
     private static X509Certificate generateCertificate(String dn, int validity, String sigAlgName) throws GeneralSecurityException, IOException {
         PrivateKey privateKey = loadPrivateKey();
@@ -85,7 +62,7 @@ public class Main {
         CertificateValidity interval = new CertificateValidity(from, to);
         BigInteger serialNumber = new BigInteger(64, new SecureRandom());
         X500Name owner = new X500Name(dn);
-        AlgorithmId sigAlgId = new AlgorithmId(AlgorithmId.sha256WithRSAEncryption_oid);
+        AlgorithmId sigAlgId = new AlgorithmId(AlgorithmId.sha1WithRSAEncryption_oid);
 
         info.set(X509CertInfo.VALIDITY, interval);
         info.set(X509CertInfo.SERIAL_NUMBER, new CertificateSerialNumber(serialNumber));
@@ -104,7 +81,6 @@ public class Main {
 
         return certificate;
     }
-
 
     public static RSAPrivateKey loadPrivateKey() throws GeneralSecurityException, IOException {
         String PRIVATE_KEY = "-----BEGIN RSA PRIVATE KEY-----" +
@@ -154,7 +130,6 @@ public class Main {
             pkcs8Lines.append(line);
         }
 
-
         String pkcs8Pem = pkcs8Lines.toString();
         pkcs8Pem = pkcs8Pem.replaceAll("\\n+", "")
                 .replace("-----BEGIN RSA PUBLIC KEY-----", "")
@@ -167,13 +142,12 @@ public class Main {
 
     }
 
-
-    public static void main(String[] args) throws GeneralSecurityException, IOException {
+    public static void main(String[] args) throws GeneralSecurityException, IOException, InterruptedException {
         try (
                 FileOutputStream fos = new FileOutputStream("C:\\Users\\sertac.demiray\\Desktop\\keystore1.jks"); // CREATE FILE
         ) {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048);
+//            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+//            keyPairGenerator.initialize(2048);
             //KeyPair keyPair = keyPairGenerator.generateKeyPair();
             // PrivateKey privateKey = keyPair.getPrivate();
             //System.out.println(privateKey);
@@ -192,5 +166,4 @@ public class Main {
         apkSign();
         verifyApk();
     }
-
 }
