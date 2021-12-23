@@ -3,8 +3,6 @@ import sun.security.x509.*;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
